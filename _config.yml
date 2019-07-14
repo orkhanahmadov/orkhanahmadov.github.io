@@ -1,0 +1,37 @@
+# Permalinks
+permalink:           pretty
+
+# Setup
+title:               Orkhan's
+tagline:             Blog about software development
+url:                 https://orkhan.dev
+paginate:            10
+baseurl:             ""
+analytics_id:        UA-143819363-1
+
+# Assets
+#
+# We specify the directory for Jekyll so we can use @imports.
+sass:
+  sass_dir:          _sass
+  style:            :compressed
+
+# About/contact
+author:
+  name:              Orkhan Ahmadov
+  url:               https://twitter.com/orkhanahmadov
+  email:             ahmadov90@gmail.com
+
+# Custom vars
+version:             2.0.0
+github:
+  repo:              https://github.com/poole/poole
+
+# Gems
+plugins:
+#  - jekyll-avatar
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-paginate
+  - jekyll-gist
