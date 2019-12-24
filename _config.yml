@@ -3,7 +3,7 @@ permalink:           pretty
 
 # Setup
 title:               Orkhan's
-tagline:             Personal blog
+tagline:             Blog
 url:                 https://orkhan.dev
 paginate:            10
 baseurl:             ""
