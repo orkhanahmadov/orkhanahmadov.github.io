@@ -60,21 +60,21 @@ But for this, first we have to look closely how `v-model` actually works.
 
 In short, this directive basically does 2 things when applied to form element:
 * Binds reactive property to element's `value` attribute
-* Handles `oninput` events fired from element
+* Handles `oninput` events fired from element to get new value
 
 This means we can replace any input `v-model` directive with `:value` property binding and `@input` event handler:
 
 ``` vue
-// this is same as
+// this is
 <input v-model="someProperty" />
 
-// this one
+// same as this one
 <input :value="someProperty" 
        @input="someProperty = $event.target.value"
 />
 ```
 
-Of course, when working with direct form elements like `input`, `select` or `textarea`, 
+Of course, when working with native html form elements like `input`, `select` or `textarea`, 
 it is always better to use `v-model` instead of manual binding.
 Because `v-model` is shorter, simpler to implement and 
 also Vue.js is smart enough to bind values and events based on type of form element.
@@ -140,7 +140,7 @@ To notify `v-model` about value changes inside our component we need to fire `in
                class="some-class"
                placeholder="Input something"
                :value="value"
-               @input="$emit('input', $event)" />
+               @input="$emit('input', $event.target.value)" />
 
         <span>Helper text here</span>
     </div>
@@ -154,7 +154,7 @@ export default {
 ```
 
 Here `@input` handler looks for `oninput` event fired from native `<input>` form element,
-then we fire our own `input` event to parent component with initial `$event` payload.
+then we fire our own `input` event to parent component with new input value as payload.
 
 Now that we satisfied `v-model` directive with our value and event binding, 
 we establish for 2-way binding with custom component.
@@ -195,7 +195,7 @@ export default {
 ```
 
 In this example when `v-model` added to `<input-element>` component,
-it will automatically send values as `typed` property and accept updated values from `changed` event.
+it will automatically send values as `typed` property and will expect updated values from `changed` event.
 
 ### Usage tips
 
@@ -203,6 +203,6 @@ Learning this small trick with `v-model` directive opens ton of possibilities fo
 2-way data binding with custom components.
 
 Don't be limited to just form elements. 
-`v-model` doesn't care how you handle passed `value` property or when you fire `input` event back.
+`v-model` does not care how you handle passed `value` property or when you fire `input` event back.
 You can create custom components which doesn't even have any form elements, 
-but based on component's behavior, it handles property and event on its own.
+but based on component's behavior, it can handle property and event on its own.
