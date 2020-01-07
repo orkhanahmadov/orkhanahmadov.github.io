@@ -2,8 +2,8 @@
 permalink:           pretty
 
 # Setup
-title:               Orkhan's
-tagline:             Blog
+title:               Orkhan's Blog
+tagline:             on software development
 url:                 https://orkhan.dev
 paginate:            10
 baseurl:             ""
