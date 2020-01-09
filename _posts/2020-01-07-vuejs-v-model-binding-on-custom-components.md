@@ -81,11 +81,11 @@ also Vue.js is smart enough to bind values and events based on type of form elem
 For example, `v-model` automatically detects that when used on `<select>` element 
 it should look for `onchange` event, instead of `oninput`.
 
-Now knowing that how `v-model` works behind the scenes, 
-we can use the same technique to add `v-model` directive to custom component,
-inside the component we'll get `value` as property and bind it to input value.
+Now knowing how `v-model` works behind the scenes, 
+we can use the same technique to add `v-model` directive to custom component, then
+inside the component we can get `value` as property and bind it to input value.
 
-Here's our new `InputElement.vue` component
+Here's our updated `InputElement.vue` component
 ``` vue
 <template>
     <div>
