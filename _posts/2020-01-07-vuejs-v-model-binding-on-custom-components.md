@@ -163,9 +163,9 @@ we establish for 2-way binding with custom component.
 
 Keep in mind that when attaching `v-model` to custom components, 
 by default it always sends `value` property and expects `input` event.
-But Vue.js allows us to change default names per each component.
+But Vue.js allows us to change default names per component.
 
-Simply add `model` object to your component. This object can contain to properties:
+Simply add `model` configuration object to your component. This object can contain 2 properties:
 * `prop` property defines how `v-model` will pass data to this component, default is `value`
 * `event` property defines which event name will be used for accepting changes for `v-model`, default is `input`
 
@@ -199,10 +199,10 @@ it will automatically send values as `typed` property and will expect updated va
 
 ### Usage tips
 
-Learning this small trick with `v-model` directive opens ton of possibilities for establishing 
+Learning this small trick with `v-model` directive opens many possibilities for establishing 
 2-way data binding with custom components.
 
 Don't be limited to just form elements. 
-`v-model` does not care how you handle passed `value` property or when you fire `input` event back.
+`v-model` does not care how you handle passed `value` property or when you fire `input` event back with update value.
 You can create custom components which doesn't even have any form elements, 
 but based on component's behavior, it can handle property and event on its own.
