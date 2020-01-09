@@ -203,6 +203,6 @@ Learning this small trick with `v-model` directive opens many possibilities for 
 2-way data binding with custom components.
 
 Don't be limited to just form elements. 
-`v-model` does not care how you handle passed `value` property or when you fire `input` event back with update value.
+`v-model` does not care how you handle passed `value` property or when you fire `input` event back with updated value.
 You can create custom components which doesn't even have any form elements, 
 but based on component's behavior, it can handle property and event on its own.
