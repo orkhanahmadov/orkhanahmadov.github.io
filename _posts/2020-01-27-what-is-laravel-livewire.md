@@ -121,7 +121,7 @@ class TaskList extends Component
     }
 }
 ```
-**Note:** Another feature of PHP 7.4, here we are using [typed-properties](https://www.php.net/manual/migration74.new-features.php#migration74.new-features.core.typed-properties).
+**Note:** Another feature of PHP 7.4, here I'm using [typed-properties](https://www.php.net/manual/migration74.new-features.php#migration74.new-features.core.typed-properties).
 
 Next, we create `fetchTasks()` method which fetches all tasks from data storage and sets `incompleteTasks` and `completeTasks` . Just like Vue components, Livewire also has its lifecycle hooks and you can use them to set values or call methods. We use `mount()` lifecycle method to call `fetchTasks()` function.
 ``` php
@@ -225,7 +225,7 @@ After creating new task, we also need to update task list in `Tasks` component w
 // CreateTask.vue
 methods: {
     async store() {
-        …
+        . . .
         this.$emit('update-list')
     }
 }
@@ -250,24 +250,24 @@ class CreateTask extends Component
 
 Next we add input form element to `create-task.blade.php` view file.
 ``` html
-<input placeholder="New task…" />
+<input placeholder="New task..." />
 ```
 
 Livewire components also support 2-way data binding just like Vue's `v-model`, but with `wire:model` directive. Property we pass to this directive must exist in component's class and needs to be publicly accessible. In our case, it is `task`.
 ``` html
-<input placeholder="New task…"
+<input placeholder="New task..."
        wire:model="task" />
 ```
 
 But unlike `v-model`, Livewire components are directly "connected" to backend component class. This means, when we attach `wire:model` to input form element, component will send AJAX request to backend with each keypress in input element. If we don't want this behavior, we can debounce user inputs with specified timeout.
 ``` html
-<input placeholder="New task…"
+<input placeholder="New task..."
        wire:model.debounce.500ms="task" />
 ```
 
 Livewire components also support event handing with `wire:{event-name}` just like Vue's `v-on`. In our example, we want to listen to event when user presses Enter button inside input form element. 
 ``` html
-<input placeholder="New task…"
+<input placeholder="New task..."
        wire:model.debounce.500ms="task"
        wire:keydown.enter="store" />
 ```
@@ -286,20 +286,20 @@ Last thing, after creating new task we need to notify our `TaskList` component t
 ``` php
 public function store(): void
 {
-    …
-	  $this->emit('updateList');
+    . . .
+	$this->emit('updateList');
 }
 ```
 
 To catch `updateList` event, we go back to `TaskList.php` component class and add `$listeners`  property. This property needs to an array, where key is name of the event and value is name of the local, publicly accessible method that needs to be called when event received. Since we already have `fetchTasks()` method that fetches all tasks and groups them, we can use this method for updating task list.
 ``` php
-…
+. . .
 
 protected $listeners = [
     'updateList' => 'fetchTasks'
 ];
 
-…
+. . .
 ```
 
 When component receives `updateList` event, it will call `fetchTasks()` method, which will fetch all tasks and re-render Blade component and send back updated HTML to frontend instance of Livewire.
