@@ -3,7 +3,7 @@ layout: post
 title: What is Laravel Livewire? Here's same app created with Laravel Livewire and pure Vue.js
 ---
 
-If you ever created full-stack application with reactive frontend and AJAX based data exchange, you know the drill, you:
+If you ever created full-stack application with reactive frontend and AJAX based data exchange with backend, you know the drill, you:
 * create an endpoint which returns JSON on resources
 * create specific event handler on frontend which sends AJAX request to backend to fetch resources
 * create frontend component which renders resources or handles user input
