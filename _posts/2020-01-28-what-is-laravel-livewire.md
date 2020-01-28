@@ -1,6 +1,6 @@
 ---
 layout: post
-title: What is Laravel Livewire? Here's same app created Laravel Livewire and pure Vue.js
+title: What is Laravel Livewire? Here's same app created with Laravel Livewire and pure Vue.js
 ---
 
 If you ever created full-stack application with reactive frontend and AJAX based data exchange, you know the drill, you:
