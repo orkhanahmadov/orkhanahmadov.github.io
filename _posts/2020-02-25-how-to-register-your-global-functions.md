@@ -16,7 +16,7 @@ Composer simplifies class autoloading with different techniques and standards. N
 
 This will autoload all classes inside `src` folder using PSR-4 standard with "App" namespace prefix.
 But how can we autoload files, global helper functions that are not directly part of namespaces classes?
-Well, if you take a look at official documentation on Composer website, you can see that "autoload" schema supports multiple standards and techniques.
+Well, if you take a look at [official documentation](https://getcomposer.org/doc/04-schema.md#autoload) on Composer website, you can see that "autoload" schema supports multiple standards and techniques.
 * `PSR-0` is old autoload standard, deprecated, but still supported. We should avoid using it.
 * `PSR-4` is modern autoload standard replaced `PSR-0`. It is main autoloading standard for namespaced classes
 * `classmap` is a autoload standard for loading classes without namespace or namespace prefix
