@@ -44,4 +44,4 @@ if (!function_exists('sayHello')) {
 }
 ```
 
-In this example, we are saying to Composer to check if global function with `sayHello` name already exists, it not then load given function, otherwise ignore it and use already available function.
+In this example, we ask Composer to check if global function with `sayHello` name already exists, it not then load given function, otherwise ignore it and use already available function.
