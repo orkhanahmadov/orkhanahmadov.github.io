@@ -42,8 +42,8 @@ export default {
 ```vue
 <template>
     <div>
-        <h2>{{ task.name }}</h2>
-        <small>{{ task.description }}</small>
+        <h2 v-text="task.name" />
+        <small v-text="task.description" />
 
         <a href="#" @click.prevent="markAsCompleted(task)">Complete</a>
         <a href="#" @click.prevent="deleteTask(task)">Delete</a>
@@ -105,8 +105,8 @@ Updated `TaskItem.vue`:
 ```vue
 <template>
     <div>
-        <h2>{{ task.name }}</h2>
-        <small>{{ task.description }}</small>
+        <h2 v-text="task.name" />
+        <small v-text="task.description" />
 
         <task-actions :task="task" />
     </div>
@@ -170,7 +170,7 @@ The better option is assigning "reference" to child components and accessing the
 ```vue
 <template>
     <div>
-        <h1>Title</h2>
+        <h1>Title</h1>
 
         <my-component-1 ref="myReferencedComponent" />
         <my-component-2 />
