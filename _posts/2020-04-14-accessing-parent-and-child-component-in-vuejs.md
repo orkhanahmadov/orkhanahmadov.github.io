@@ -71,7 +71,7 @@ export default {
 </script>
 ```
 
-Now imagine we want to move task item actions to its component, something like `TaskActions.vue`
+Now imagine we want to move task item actions to a dedicated component, something like `TaskActions.vue`
 ```vue
 <template>
     <div>
@@ -125,7 +125,7 @@ export default {
 </script>
 ```
 
-If you noticed, with this approach now we have a problem. `this.$emit()` call is no more on `TaskItem` component but `TaskActions`. Events fired from `this.$emit()` can be listened only on the direct parent component. In our case, the parent of `TaskActions` component is `TaskItem` component, this means `@refresh="refreshList"` listener will no longer work on `Tasks` component.
+If you noticed, with this approach now we have a problem. `this.$emit()` call is no longer on `TaskItem` component but `TaskActions`. Events fired from `this.$emit()` can be listened only on the direct parent component. In our case, the parent of `TaskActions` component is `TaskItem` component, this means `@refresh="refreshList"` listener will no longer work on `Tasks` component.
 
 ## Meet `$parent` property
 Every Vue component has a special property called `$parent` which allows us to access direct parent component from the current child component. When using `$parent` acts as you are on the parent component, this means you can access parent component's properties, data, fire actions, mutate data also emit and listen to the event. Knowing this, we can now refactor our `TaskActions` component to emit events on parent component instead, with `this.$parent.$emit()`
