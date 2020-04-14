@@ -13,8 +13,8 @@ In Vue.js creating nested components and passing data between them is pretty str
     <div>
         <h1>Task list</h1>
 
-        <div v-for=“task in tasks”>
-            <task-item :task=“task” @refresh=“refreshList” />
+        <div v-for="task in tasks">
+            <task-item :task="task" @refresh="refreshList" />
         </div>
     </div>
 </template>
@@ -45,26 +45,26 @@ export default {
         <h2>{{ task.name }}</h2>
         <small>{{ task.description }}</small>
 
-        <a href=“#” @click.prevent=“markAsCompleted(task)”>Complete</a>
-        <a href=“#” @click.prevent=“deleteTask(task)”>Delete</a>
+        <a href="#" @click.prevent="markAsCompleted(task)">Complete</a>
+        <a href="#" @click.prevent="deleteTask(task)">Delete</a>
     </div>
 </template>
 
 <script>
 export default {
-    props: [‘task’],
+    props: ['task'],
 
     methods: {
         markAsCompleted(task) {
             // send HTTP request to backend mark task as completed
 
-            this.$emit(‘refresh’)
+            this.$emit('refresh')
         },
 
         deleteTask(task) {
             // send HTTP request to the backend to delete the task
 
-            this.$emit(‘refresh’)
+            this.$emit('refresh')
         }
     }
 }
@@ -75,26 +75,26 @@ Now imagine we want to move task item actions to its component, something like `
 ```vue
 <template>
     <div>
-        <a href=“#” @click.prevent=“markAsCompleted(task)”>Complete</a>
-        <a href=“#” @click.prevent=“deleteTask(task)”>Delete</a>
+        <a href="#" @click.prevent="markAsCompleted(task)">Complete</a>
+        <a href="#" @click.prevent="deleteTask(task)">Delete</a>
     </div>
 </template>
 
 <script>
 export default {
-    props: [‘task’],
+    props: ['task'],
 
     methods: {
         markAsCompleted(task) {
             // send HTTP request to backend mark task as completed
 
-            this.$emit(‘refresh’)
+            this.$emit('refresh')
         },
 
         deleteTask(task) {
             // send HTTP request to the backend to delete the task
 
-            this.$emit(‘refresh’)
+            this.$emit('refresh')
         }
     }
 }
@@ -108,15 +108,15 @@ Updated `TaskItem.vue`:
         <h2>{{ task.name }}</h2>
         <small>{{ task.description }}</small>
 
-        <task-actions :task=“task” />
+        <task-actions :task="task" />
     </div>
 </template>
 
 <script>
-import TaskActions from ‘~/components/TaskActions’
+import TaskActions from '~/components/TaskActions'
 
 export default {
-    props: [‘task’],
+    props: ['task'],
 
     components: {
         TaskActions
@@ -125,46 +125,46 @@ export default {
 </script>
 ```
 
-If you noticed, with this approach now we have a problem. `this.$emit()` call is no more on `TaskItem` component but `TaskActions`. Events fired from `this.$emit()` can be listened only on the direct parent component. In our case, the parent of `TaskActions` component is `TaskItem` component, this means `@refresh=“refreshList”` listener will no longer work on `Tasks` component.
+If you noticed, with this approach now we have a problem. `this.$emit()` call is no more on `TaskItem` component but `TaskActions`. Events fired from `this.$emit()` can be listened only on the direct parent component. In our case, the parent of `TaskActions` component is `TaskItem` component, this means `@refresh="refreshList"` listener will no longer work on `Tasks` component.
 
 ## Meet `$parent` property
-Every Vue component has a special property called `$parent` which allows us to access direct parent component from the current child component. When using `$parent` acts as you are on the parent component, this means you can access parent component’s properties, data, fire actions, mutate data also emit and listen to the event. Knowing this, we can now refactor our `TaskActions` component to emit events on parent component instead, with `this.$parent.$emit()`
+Every Vue component has a special property called `$parent` which allows us to access direct parent component from the current child component. When using `$parent` acts as you are on the parent component, this means you can access parent component's properties, data, fire actions, mutate data also emit and listen to the event. Knowing this, we can now refactor our `TaskActions` component to emit events on parent component instead, with `this.$parent.$emit()`
 
 Updated `TaskActions.vue`
 ```vue
 <template>
     <div>
-        <a href=“#” @click.prevent=“markAsCompleted(task)”>Complete</a>
-        <a href=“#” @click.prevent=“deleteTask(task)”>Delete</a>
+        <a href="#" @click.prevent="markAsCompleted(task)">Complete</a>
+        <a href="#" @click.prevent="deleteTask(task)">Delete</a>
     </div>
 </template>
 
 <script>
 export default {
-    props: [‘task’],
+    props: ['task'],
 
     methods: {
         markAsCompleted(task) {
             // send HTTP request to backend mark task as completed
 
-            this.$parent.$emit(‘refresh’)
+            this.$parent.$emit('refresh')
         },
 
         deleteTask(task) {
             // send HTTP request to the backend to delete the task
 
-            this.$parent.$emit(‘refresh’)
+            this.$parent.$emit('refresh')
         }
     }
 }
 </script>
 ```
 
-Because the parent of the `TaskActions` component is `TaskItem`, events will be emitted on `TaskItem` component, this time `Tasks` component will be able to catch our “refresh” event.
+Because the parent of the `TaskActions` component is `TaskItem`, events will be emitted on `TaskItem` component, this time `Tasks` component will be able to catch our "refresh" event.
 
 ## What about accessing child components?
 Vue also provides `$children` property, when used returns array of direct child components of the current component. Because `children` property returns an array of child components and without any order guarantee, this makes it a little bit hard to work with.
-The better option is assigning “reference” to child components and accessing them through `$refs` property. Here’s an example:
+The better option is assigning "reference" to child components and accessing them through `$refs` property. Here's an example:
 
 `Parent.vue`
 ```vue
@@ -172,16 +172,16 @@ The better option is assigning “reference” to child components and accessing
     <div>
         <h1>Title</h2>
 
-        <my-component-1 ref=“myReferencedComponent” />
+        <my-component-1 ref="myReferencedComponent" />
         <my-component-2 />
 
-        <button type=“button” @click.prevent=“handleClick”>Button</button>
+        <button type="button" @click.prevent="handleClick">Button</button>
     </div>
 </template>
 
 <script>
-import MyComponent1 from ‘~/components/MyComponent1’
-import MyComponent2 from ‘~/components/MyComponent2’
+import MyComponent1 from '~/components/MyComponent1'
+import MyComponent2 from '~/components/MyComponent2'
 
 export default {
     components: {
