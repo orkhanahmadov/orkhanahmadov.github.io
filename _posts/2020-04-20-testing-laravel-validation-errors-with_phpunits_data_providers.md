@@ -80,7 +80,7 @@ public function validationErrors()
 {
     return [
         [['full_name' => ''], 'full_name', 'validation.required'],
-        [['full_name' => \Str::random(31)]], 'full_name', 'validation.string.max', ['max' => 30]],
+        [['full_name' => \Str::random(31)]], 'full_name', 'validation.max.string', ['max' => 30]],
         [['email' => ''], 'email', 'validation.required'],
         [['email' => 'not-an-email'], 'email', 'validation.email'],
         [['email' => 'existing@example.com'], 'email', 'validation.unique'],
