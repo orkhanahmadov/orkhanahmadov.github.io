@@ -15,7 +15,7 @@ Simply enable query logging before database calls.
 \DB::enableQueryLog();
 ```
 
-Every database call after this like will be logged and stored in memory. To get list of logged queries, use:
+Every database call after this line will be logged and stored in memory. To get list of logged queries, use:
 
 ```php
 \DB::getQueryLog();
@@ -30,22 +30,24 @@ To disable logging, use:
 
 You can use query logging for analyzing database performance, but it is especially useful for counting executed database queries in tests.
 
-Lets imagine this scenario:
+Let's imagine following scenario:
 * You have `books` and `authors` tables
 * Each book belongs to one author
 * You want to send request to `/books` endpoint to retrieve all books with their author relationship.
 
-If you use Eloquent and you apply best practices, then realistically doesn't matter the number of records in tables, application should fire exactly 2 database queries:
-* One for getting all `books`
-* One for getting all `authors` related to those books
+If you use Eloquent and apply best practices, then realistically doesn't matter the number of records in tables, application should fire exactly 2 database queries:
+* 1 query for getting all `books`
+* 1 query for getting all `authors` related to those books
 
-Here's our test covers executed database query count:
+Here's our test case that covers executed database query count:
 
 ```php
 public function testExecutesExactly2Queries()
 {
     factory(Author::class, 5)->create()
-        ->each(fn ($author) => factory(Book::class, 5)->create(['author_id' => $author->id]));
+        ->each(fn ($author) => factory(Book::class, 3)->create([
+            'author_id' => $author->id
+        ]));
 
     // we enable query logging after factory class,
     // because we don't author and book creations to be logged
@@ -57,5 +59,5 @@ public function testExecutesExactly2Queries()
 }
 ```
 
-This is very simple example, but it should give you the idea how to use query logging in your tests and database performance checks.
-Especially, when your application has complex queries, query caching, it is very handy to utilize query logging and counting logged queries.
+Of course, this is very simple example, but it should give you the idea how to use query logging in your tests and database performance checks.
+Especially, when your application has complex queries, query caching, etc, it is very handy to utilize query logging to count executed queries.
