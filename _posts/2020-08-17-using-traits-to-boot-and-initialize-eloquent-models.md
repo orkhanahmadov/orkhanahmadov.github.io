@@ -6,7 +6,7 @@ title: Using traits to boot and initialize Eloquent models
 If you ever used Eloquent events, you are probably aware of special `boot()` static method in Eloquent models.
 This method allows you to hook into special events by running given functions.
 
-Here's an example, let's say we have a `Post` model and when we are creating a new post, model needs to generate slug `attribute` based on `name`.
+Here's an example, let's say we have a `Post` model and when we are creating a new post, model needs to generate `slug` attribute based on `name`.
 
 <!--more-->
 
@@ -37,7 +37,7 @@ This might look fine for single shared logic like slug generation, but what if w
 For example, `Post` models need to generate UUID on creation but this does not apply to `Author` model.
 This will kill the purpose of having our own base class, since we'll need to override that `boot()` method again for `Post` model.
 
-There's a better solution. In PHP it easy to share same piece of code between multiple classes using traits.
+There's a better solution. In PHP it is easy to share same piece of code between multiple classes using traits.
 But, without overriding `boot()` method we don't have control over how it works, and we cannot call our trait methods.
 
 ### Introducing "bootable" Eloquent traits
