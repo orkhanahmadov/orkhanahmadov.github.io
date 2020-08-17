@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Using traits to boot or initialize Eloquent models
+title: Using traits to boot and initialize Eloquent models
 ---
 
 If you ever used Eloquent events, you are probably aware of special `boot()` static method in Eloquent models.
@@ -177,4 +177,5 @@ trait CreatesApiKey
 ```
 
 Now, whenever you create a new model which uses `CreatesApiKey` trait, Eloquent will automatically call `initializeCreatesApiKey()` method and assign `api_key` attribute.
-`initialize` trait methods are useful when you want to generate and assign some value on model gets instantiated.  
+`initialize` trait methods are useful when you want to generate and assign some value to an attribute when model gets instantiated, 
+and value of that attribute doesn't need to depend on another model attribute.  
