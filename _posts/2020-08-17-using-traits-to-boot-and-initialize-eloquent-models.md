@@ -27,7 +27,7 @@ class Post extends Model
 }
 ```
 
-**Quick tip:** Since Laravel 7, we can also use `booted()` static method, it is same as `boot()` method, but using `booted()` means we no longer need to call parent method.
+> **Quick tip:** Since Laravel 7, we can also use `booted()` static method, internally Eloquent first runs `boot()` method, then `booted()`. This means when using `booted()` we no longer need to call parent method.
 
 Now, here's a situation, let's say we also have `Author` model and that model also needs to have exactly same behavior, it needs to generate author slug based on an author's `name` attribute.
 We don't want to duplicate same code piece on `Author` model, but how we can share the same logic between multiple independent models?
@@ -161,7 +161,7 @@ Eloquent will handle booting each trait.
 
 ### Wait, what about that `initialize` thing in `bootTraits()`?
 
-Other than `bootMyTrait()` method, we can also have `initializeMyTrait()` in your Eloquent traits.
+Other than `bootMyTrait()` method, we can also have `initializeMyTrait()` in Eloquent traits.
 "Initializer" method needs to be non-static, and it will get executed when new model gets instantiated.
 
 Here's an example:
