@@ -27,7 +27,7 @@ class Post extends Model
 }
 ```
 
-> **Quick tip:** Since Laravel 7, we can also use `booted()` static method, internally Eloquent first runs `boot()` method, then `booted()`. This means when using `booted()` we no longer need to call parent method.
+> **Tip:** Since Laravel 7, we can also use `booted()` static method, internally Eloquent first runs `boot()` method, then `booted()`. This means when using `booted()` we no longer need to call parent method.
 
 Now, here's a situation, let's say we also have `Author` model and that model also needs to have exactly same behavior, it needs to generate author slug based on an author's `name` attribute.
 We don't want to duplicate same code piece on `Author` model, but how we can share the same logic between multiple independent models?
