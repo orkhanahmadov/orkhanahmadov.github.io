@@ -3,14 +3,14 @@ layout: post
 title: Using pre-built Docker images with Laravel Vapor to reduce deployment time
 ---
 
-Vapor's custom Docker runtimes are great to customize environment dependencies, adding PHP extensions, changing configuration, etc.
+Vapor's custom Docker runtimes are great for customizing environment dependencies, adding PHP extensions, changing configuration, etc.
 
 But doing all of this requires building the deployment image from scratch, on every single deployment.
 If you are using tools like GitHub Actions to automate the deployment, increased deployment time will eat up your GitHub Actions minutes quickly.
 
 <!--more-->
 
-Perfect example to this would be using the `imagick` PHP extension. Adding `imagick` extension to Dockerfile requires building it from source, which can take a lot of time.
+A perfect example of this would be using the `imagick` PHP extension. Adding an `imagick` extension to the Dockerfile requires building it from a source, which can take a lot of time.
 
 Consider the following `production.Dockerfile`:
 
@@ -24,7 +24,7 @@ RUN apk add --update --no-cache autoconf g++ imagemagick-dev \
 COPY . /var/task
 ```
 
-On this post I will show how to use pre-built Docker images with Laravel Vapor and use it as base image for your application's deployments.
+In this post, I will show how to use pre-built Docker image with Laravel Vapor and use it as base images for your application's deployments.
 
 We'll cover the following steps:
 
@@ -34,7 +34,7 @@ We'll cover the following steps:
 
 ## Building the base Docker image
 
-Create `Dockerfile` in the root of your project with similar content with the `production.Dockerfile` but without the `COPY` command:
+Create a `Dockerfile` in the root of your project with similar content to the `production.Dockerfile` but without the `COPY` command:
 
 ```Dockerfile
 FROM laravelphp/vapor:php82
@@ -44,7 +44,7 @@ RUN apk add --update --no-cache autoconf g++ imagemagick-dev \
     && docker-php-ext-enable imagick 
 ```
 
-The goal is to build a Docker image with all the dependencies, extensions and configurations necessary without adding the project files.
+The goal is to build a Docker image with all the dependencies, extensions, and configurations necessary without adding the project files.
 
 Build this Docker image with a tag. I'm using `vapor-base` in this example:
 
@@ -54,9 +54,9 @@ docker build -t vapor-base .
 
 ## Pushing the base Docker image to AWS ECR
 
-Create a new repository in AWS ECR. You can choose either public and private repository type.
+Create a new repository in AWS ECR. You can choose either a public or private repository type.
 
-Once you create the repository, repository URI will look like this:
+Once you create the repository, the repository URI will look like this:
 
 ```shell
 1234567890.dkr.ecr.AWS-REGION-1.amazonaws.com/vapor-base
@@ -64,7 +64,7 @@ Once you create the repository, repository URI will look like this:
 
 Replace `1234567890` with your AWS account ID and `AWS-REGION-1` with your AWS region.
 
-Use AWS CLI, login to your account and retrieve the authentication token to authenticate your Docker client to the registry:
+Use AWS CLI, log in to your account, and retrieve the authentication token to authenticate your Docker client to the registry:
 
 ```shell
 aws ecr get-login-password --region AWS-REGION-1 | docker login --username AWS --password-stdin 1234567890.dkr.ecr.AWS-REGION-1.amazonaws.com
@@ -84,7 +84,7 @@ docker push 1234567890.dkr.ecr.AWS-REGION-1.amazonaws.com/vapor-base:latest
 
 ## Using the base Docker image in your Laravel Vapor project
 
-Now that we have the base Docker image in AWS ECR, we can use it in our Laravel Vapor project. Open `production.Dockerfile` and do the following changes:
+Now that we have the base Docker image in AWS ECR, we can use it in our Laravel Vapor project. Open `production.Dockerfile` and make the following changes:
 
 ```Dockerfile
 FROM 1234567890.dkr.ecr.AWS-REGION-1.amazonaws.com/vapor-base:latest 
