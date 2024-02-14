@@ -15,8 +15,9 @@ For example, `deploy.yml`. If you have more than one environment, you can create
 `deploy-production.yml` for production, `deploy-staging.yml` for staging, etc.
 
 One important note, before everything else, in the examples below whenever you see `secrets.X` make sure to wrap it with `${{` and `}}` in your actual workflow file.
-GitHub automatically removes any mention variables when building the site, so I had to place them with without variable wrappers to avoid this.
-That's really smart from GitHub to protect accidental exposure of secrets!
+GitHub automatically removes any mentioned variables when building the site, so I had to place them without variable wrappers to avoid this.
+
+That's smart from GitHub to protect against accidental exposure of secrets!
 
 ## Basic deployment using GitHub Actions without custom Docker image
 
