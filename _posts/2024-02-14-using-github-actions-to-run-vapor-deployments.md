@@ -14,8 +14,9 @@ First, create a GitHub action workflow file in the `.github/workflows` directory
 For example, `deploy.yml`. If you have more than one environment, you can create separate workflow files for each environment.
 `deploy-production.yml` for production, `deploy-staging.yml` for staging, etc.
 
-One important note, before everything else, please replace `scrts.` with `secrets.` in the examples below, like in this one `${{ scrts.VAPOR_API_TOKEN }}`.
-GitHub automatically removes any mention of `secrets` variables when building the site, so I had to replace it with `scrts` to avoid this.
+One important note, before everything else, in the examples below whenever you see `secrets.X` make sure to wrap it with `${{` and `}}` in your actual workflow file.
+GitHub automatically removes any mention variables when building the site, so I had to place them with without variable wrappers to avoid this.
+That's really smart from GitHub to protect accidental exposure of secrets!
 
 ## Basic deployment using GitHub Actions without custom Docker image
 
@@ -25,7 +26,7 @@ Here's a basic example of a GitHub Actions workflow file that deploys a Laravel 
 name: Deploy Production
 
 env:
-  VAPOR_API_TOKEN: ${{ scrts.VAPOR_API_TOKEN }}
+  VAPOR_API_TOKEN: secrets.VAPOR_API_TOKEN
 
 on:
   push:
@@ -93,7 +94,7 @@ Luckily for us, there are official GitHub Actions runners for each of these step
 name: Deploy Production
 
 env:
-  VAPOR_API_TOKEN: ${{ scrts.VAPOR_API_TOKEN }}
+  VAPOR_API_TOKEN: secrets.VAPOR_API_TOKEN
 
 on:
   push:
@@ -125,8 +126,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: ${{ scrts.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ scrts.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: secrets.AWS_ACCESS_KEY_ID
+          aws-secret-access-key: secrets.AWS_SECRET_ACCESS_KEY
           aws-region: AWS-REGION-1
 
       - name: Login to Amazon ECR
