@@ -14,10 +14,10 @@ First, create a GitHub action workflow file in the `.github/workflows` directory
 For example, `deploy.yml`. If you have more than one environment, you can create separate workflow files for each environment.
 `deploy-production.yml` for production, `deploy-staging.yml` for staging, etc.
 
-One important note, before everything else, in the examples below whenever you see `secrets.X` make sure to wrap it with <img src="https://i.imgur.com/4vdxMuO.png" height="18" style="display:inline;margin:0"/> and <img src="https://i.imgur.com/oZXvoRU.png" height="19" style="display:inline;margin:0"/> in your actual workflow file.
+One important note, before everything else, in the examples below whenever you see `${secrets.X}` make sure to wrap it with <img src="https://i.imgur.com/4vdxMuO.png" height="18" style="display:inline;margin:0"/> and <img src="https://i.imgur.com/oZXvoRU.png" height="19" style="display:inline;margin:0"/> in your actual workflow file.
 GitHub automatically removes any mentioned variables when building the site, so I had to place them without variable wrappers to avoid this.
 
-That's smart from GitHub to protect against accidental exposure of secrets!
+That's actually really smart from GitHub to protect against accidental exposure of secrets!
 
 ## Basic deployment using GitHub Actions without custom Docker image
 
@@ -27,7 +27,7 @@ Here's a basic example of a GitHub Actions workflow file that deploys a Laravel 
 name: Deploy Production
 
 env:
-  VAPOR_API_TOKEN: secrets.VAPOR_API_TOKEN
+  VAPOR_API_TOKEN: ${secrets.VAPOR_API_TOKEN}
 
 on:
   push:
@@ -95,7 +95,7 @@ Luckily for us, there are official GitHub Actions runners for each of these step
 name: Deploy Production
 
 env:
-  VAPOR_API_TOKEN: secrets.VAPOR_API_TOKEN
+  VAPOR_API_TOKEN: ${secrets.VAPOR_API_TOKEN}
 
 on:
   push:
@@ -127,8 +127,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: secrets.AWS_ACCESS_KEY_ID
-          aws-secret-access-key: secrets.AWS_SECRET_ACCESS_KEY
+          aws-access-key-id: ${secrets.AWS_ACCESS_KEY_ID}
+          aws-secret-access-key: ${secrets.AWS_SECRET_ACCESS_KEY}
           aws-region: AWS-REGION-1
 
       - name: Login to Amazon ECR
@@ -138,9 +138,9 @@ jobs:
       - name: Login Docker to ECR
         uses: docker/login-action@v3
         with:
-          registry: ${{ steps.login-ecr.outputs.registry }}
-          username: ${{ steps.login-ecr.outputs.docker_username_1234567890_dkr_ecr_AWS-REGION-1_amazonaws_com }}
-          password: ${{ steps.login-ecr.outputs.docker_password_1234567890_dkr_ecr_AWS-REGION-1_amazonaws_com }}
+          registry: ${steps.login-ecr.outputs.registry}
+          username: ${steps.login-ecr.outputs.docker_username_1234567890_dkr_ecr_AWS-REGION-1_amazonaws_com}
+          password: ${steps.login-ecr.outputs.docker_password_1234567890_dkr_ecr_AWS-REGION-1_amazonaws_com}
 
       - name: Deploy Environment
         run: ./vendor/bin/vapor deploy production
@@ -149,7 +149,7 @@ jobs:
 ### Configure AWS credentials
 
 In this step, we use the `aws-actions/configure-aws-credentials` action to configure AWS credentials using the AWS access key and secret.
-As you can notice we provide this action with `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` scrts. This means you need to add these secrets to your repository settings as well, similar to `VAPOR_API_TOKEN`.
+As you can notice we provide this action with `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` secrets. This means you need to add these secrets to your repository settings as well, similar to `VAPOR_API_TOKEN`.
 
 I recommend you create a dedicated IAM user on your AWS account with the minimum required permissions and use its access key and secret here.
 AWS has a special user policy called `AWSAppRunnerServicePolicyForECRAccess`, which allows listing and reading from ECR repositories, it is a perfect policy for this use case.
