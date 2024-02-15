@@ -14,7 +14,7 @@ First, create a GitHub action workflow file in the `.github/workflows` directory
 For example, `deploy.yml`. If you have more than one environment, you can create separate workflow files for each environment.
 `deploy-production.yml` for production, `deploy-staging.yml` for staging, etc.
 
-One important note, before everything else, in the examples below whenever you see `${secrets.X}` make sure to wrap it with <img src="https://i.imgur.com/4vdxMuO.png" height="18" style="display:inline;margin:0"/> and <img src="https://i.imgur.com/oZXvoRU.png" height="19" style="display:inline;margin:0"/> in your actual workflow file.
+One important note, before everything else, in the examples below whenever you see `${secrets.X}` make sure to replace `${` with <img src="https://i.imgur.com/4vdxMuO.png" height="18" style="display:inline;margin:0"/> and `}` with <img src="https://i.imgur.com/oZXvoRU.png" height="19" style="display:inline;margin:0"/> in your actual workflow file.
 GitHub automatically removes any mentioned variables when building the site, so I had to place them without variable wrappers to avoid this.
 
 That's actually really smart from GitHub to protect against accidental exposure of secrets!
