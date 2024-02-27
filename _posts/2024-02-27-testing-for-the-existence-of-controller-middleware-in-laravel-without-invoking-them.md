@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Testing for the existence of controller middlewares in Laravel without invoking them
+title: Testing for the existence of controller middleware in Laravel without invoking them
 ---
 
 If you are feature-testing your controllers, you’ve probably written test cases like this:
@@ -48,22 +48,22 @@ This controller uses middleware to make sure the user
 - has permission to post
 
 Additionally, because it is a web controller it needs to have `web` middleware on it too.
-How do we test against this controller and assert that all middlewares are assigned to it? As we said writing and running dedicated test cases is not an option, they are repetitive, boring, and hard to set up...
+How do we test against this controller and assert that all middleware are assigned to it? As we said writing and running dedicated test cases is not an option, they are repetitive, boring, and hard to set up...
 
-But here’s the trick. Since all controllers get registered within Laravel once the framework boots up, all assigned middlewares also get registered.
-This means we can query Laravel's route registrar for a specific route with a name and get the list of assigned middlewares to it!
+But here’s the trick. Since all controllers get registered within Laravel once the framework boots up, all assigned middleware also get registered.
+This means we can query Laravel's route registrar for a specific route with a name and get the list of assigned middleware to it!
 Here's how we can do it:
 
 ```php
 $route = \Illuminate\Support\Facades\Route::getRoutes()->getByName($name);
 
-$assignedMiddlewares = $route->gatherMiddleware();
+$assignedMiddleware = $route->gatherMiddleware();
 ```
 
 We can create a custom test assertion method on `TestCase`:
 
 ```php
-protected function assertRouteHasMiddleware(string $name, array $expectedMiddlewares): void
+protected function assertRouteHasMiddleware(string $name, array $expectedMiddleware): void
 {
     $route = Route::getRoutes()->getByName($name);
     
@@ -72,9 +72,9 @@ protected function assertRouteHasMiddleware(string $name, array $expectedMiddlew
     }
 
     $this->assertSame(
-        $expectedMiddlewares,
+        $expectedMiddleware,
         $route->gatherMiddleware(),
-        "Expected middlewares are not assigned to the route `{$name}`".
+        "Expected middleware are not assigned to the route `{$name}`".
     );
 }
 ```
@@ -82,7 +82,7 @@ protected function assertRouteHasMiddleware(string $name, array $expectedMiddlew
 Using the previous example, we can now test the `CreatePostController` like this:
 
 ```php
-public function testCreatePostControllerMiddlewares(): void
+public function testCreatePostControllerMiddleware(): void
 {
     $this->assertRouteHasMiddleware('createPost', [
         'web',
@@ -94,12 +94,12 @@ public function testCreatePostControllerMiddlewares(): void
 }
 ```
 
-That's it! Now we can test for the existence of middlewares without actually invoking the controllers.
+That's it! Now we can test for the existence of middleware without actually invoking the controllers.
 This is a great way to make sure that your controllers are properly protected without writing repetitive test cases.
 
-This is especially important when you are using middlewares from Laravel itself or third-party packages.
-You shouldn't be testing those middlewares' actual behavior, but assume that they are already unit tested, and you should only test that they are assigned to the controller that we use.
+This is especially important when you are using middleware from Laravel itself or third-party packages.
+You shouldn't be testing those middleware's actual behavior, but assume that they are already unit tested, and you should only test that they are assigned to the controller that we use.
 
-Of course, this approach also assumes that you are already unit-testing your application's custom middlewares. For example, if `role:editor` is a custom middleware, you should cover them with unit tests too.
+Of course, this approach also assumes that you are already unit-testing your application's custom middleware. For example, if `role:editor` is a custom middleware, you should cover them with unit tests too.
 
 Happy testing!
