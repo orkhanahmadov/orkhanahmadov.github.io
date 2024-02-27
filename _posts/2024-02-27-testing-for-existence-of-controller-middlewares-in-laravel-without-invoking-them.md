@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Testing for existence of controller middlewares in Laravel without invoking them
+title: Testing for the existence of controller middlewares in Laravel without invoking them
 ---
 
-If you are feature testing your controllers, you’ve probably written test cases like this:
+If you are feature-testing your controllers, you’ve probably written test cases like this:
 
 ```php
 public function testRequiresAuthState(): void
@@ -13,14 +13,14 @@ public function testRequiresAuthState(): void
 }
 ```
 
-Here you intentionally don't create/assign any user to session and try to access a route that requires authentication.
+Here you intentionally don't create/assign any user to the session and try to access a route that requires authentication.
 
 <!--more-->
 
 While they get the job done, when you have a lot of controllers that use the same middleware check it gets repetitive.
-You can’t also skip writing them as they make sure you don’t mistakenly leave any controller public.
+You can’t skip writing them as they ensure you don’t mistakenly leave any controller public.
 
-One option to solve this would be creating custom test assertion method on the main `TestCase` class, something like:
+One option to solve this would be creating a custom test assertion method on the main `TestCase` class, something like:
 
 ```php
 public function assertRouteRequiresAuth(string $route, string $method = 'get'): void
@@ -30,8 +30,8 @@ public function assertRouteRequiresAuth(string $route, string $method = 'get'): 
 }
 ```
 
-This method can take a route and method, internally do the assertion. While this solves the previous problem for checking if route is login protected, we can’t write this kind of custom assertion methods for every single middleware.
-Besides, real-world controllers has more than one middleware and they usually depend on complex setup. Repeating that setup on every test case is not ideal.
+This method can take a route and method, internally do the assertion. While this solves the previous problem of checking if the route is auth-protected, we can’t write this kind of custom assertion method for every middleware.
+Besides, real-world controllers have more than one middleware and usually depend on complex setups. Reproducing those setups on every test case is not ideal.
 
 Take this web controller as an example:
 
@@ -41,17 +41,17 @@ Route::post('/', CreatePostController::class)
     ->name('createPost');
 ```
 
-This controller uses middlewares to make sure user
+This controller uses middleware to make sure the user
 - signed in
 - has verified email
-- has role of editor
+- has the role of editor
 - has permission to post
 
-Additionally, because it is a web controller it needs to have web middleware on it too.
-How do we test against this controller and assert that all middlewares assign to it. Writing and running dedicated test cases it not an option, they are repetitive, boring and hard to setup...
+Additionally, because it is a web controller it needs to have `web` middleware on it too.
+How do we test against this controller and assert that all middlewares are assigned to it? As we said writing and running dedicated test cases is not an option, they are repetitive, boring, and hard to set up...
 
-But here’s the trick. Since all controllers get registered within Laravel once framework boots up, all assigned middlewares also get registered.
-This means we can query Laravel's route registrar for specific route and get the list of assigned middlewares to it!
+But here’s the trick. Since all controllers get registered within Laravel once the framework boots up, all assigned middlewares also get registered.
+This means we can query Laravel's route registrar for a specific route with a name and get the list of assigned middlewares to it!
 Here's how we can do it:
 
 ```php
@@ -60,7 +60,7 @@ $route = \Illuminate\Support\Facades\Route::getRoutes()->getByName($name);
 $assignedMiddlewares = $route->gatherMiddleware();
 ```
 
-We can create a custom test assertion method that does this for us:
+We can create a custom test assertion method on `TestCase`:
 
 ```php
 protected function assertRouteHasMiddleware(string $name, array $expectedMiddlewares): void
@@ -68,7 +68,7 @@ protected function assertRouteHasMiddleware(string $name, array $expectedMiddlew
     $route = Route::getRoutes()->getByName($name);
     
     if (is_null($route)) { // in case non-existing route name is passed
-        throw new RouteNotFoundException("Route [{$name}] not defined.");
+        $this->fail("Route `{$name}` not defined.");
     }
 
     $this->assertSame(
@@ -97,9 +97,9 @@ public function testCreatePostControllerMiddlewares(): void
 That's it! Now we can test for the existence of middlewares without actually invoking the controllers.
 This is a great way to make sure that your controllers are properly protected without writing repetitive test cases.
 
-This is especially important when you are using middlewares from Laravel itself or from third-party packages.
-You shouldn't be testing those middlewares actual behavior, you should assume that they are already unit tested, and you should only test that they are assigned to the controller that we use them on.
+This is especially important when you are using middlewares from Laravel itself or third-party packages.
+You shouldn't be testing those middlewares' actual behavior, but assume that they are already unit tested, and you should only test that they are assigned to the controller that we use.
 
-Of course, this approach also assumes that you are already unit testing your application's custom middlewares. For example, if `role:editor` is a custom middleware, you should cover them with unit tests too.
+Of course, this approach also assumes that you are already unit-testing your application's custom middlewares. For example, if `role:editor` is a custom middleware, you should cover them with unit tests too.
 
 Happy testing!
