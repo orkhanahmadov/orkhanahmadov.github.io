@@ -25,7 +25,7 @@ One option to solve this would be creating a custom test assertion method on the
 ```php
 public function assertRouteRequiresAuth(string $route, string $method = 'get'): void
 {
-    $this->call('get', $route)
+    $this->call($method, $route)
         ->assertRedirect(route('login'));
 }
 ```
