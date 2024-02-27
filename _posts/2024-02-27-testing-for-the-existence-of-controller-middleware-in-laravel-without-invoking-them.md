@@ -100,6 +100,6 @@ This is a great way to make sure that your controllers are properly protected wi
 This is especially important when you are using middleware from Laravel itself or third-party packages.
 You shouldn't be testing those middleware's actual behavior, but assume that they are already unit tested, and you should only test that they are assigned to the controller that we use.
 
-Of course, this approach also assumes that you are already unit-testing your application's custom middleware. For example, if `role:editor` is a custom middleware, you should cover them with unit tests too.
+Of course, this approach also assumes that you are already unit-testing your application's custom middleware. For example, if `role:editor` is a custom middleware, you should cover it with unit tests too.
 
 Happy testing!
