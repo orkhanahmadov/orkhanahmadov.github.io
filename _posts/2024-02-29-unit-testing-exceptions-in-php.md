@@ -28,7 +28,7 @@ If we want to write test coverage for this class it will require 2 test cases:
 
 <!--more-->
 
-First one, is straightforward:
+The first one is straightforward:
 
 ```php
 public function testDeletesPostWhenNotPublished(): void
@@ -96,9 +96,9 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 }
 ```
 
-But if you run it, you'll see test case is not passing and complaining about the exception code `0` not the same as `403`.
-Why is that? Because PHPUnit's `expectExceptionCode` checks against exception's internal code, not the HTTP status code.
-In this case for `HttpException` it is by default `0` and we are not modifying the exceptions internal code.
+But if you run it, you'll see the test case is not passing and complaining about the exception code `0` not the same as `403`.
+Why is that? Because PHPUnit's `expectExceptionCode` checks against the exception's internal code, not the HTTP status code.
+In this case for `HttpException` it is by default `0` and we are not modifying the exception's internal code.
 
 If we take a look at `HttpException` you can see provided `$statusCode` is saved as a private property and there is a method `getStatusCode` to get it:
 
@@ -146,10 +146,10 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 
 This gets the job code, now we have a full test coverage for your action class.
 
-But looking at this test case and seeing how we do a workaround to assert the exception, this highlights a possible improvement to our code.
-The exception we are throwing in our code is no longer a basic `HttpException`, but modified version of it.
+But looking at this test case and seeing how we do a workaround to assert the exception, highlights a possible improvement to our code.
+The exception we are throwing in our code is no longer a basic `HttpException`, but a modified version of it.
 We modify its status code and message to fit exactly into our business logic.
-This is good opportunity to create a custom exception class for this use case and abstract the exception details into it. Something like:
+This is a good opportunity to create a custom exception class for this use case and abstract the exception details into it. Something like:
 
 ```php
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -197,7 +197,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 As you can see because we use the custom exception class, we no longer need to assert against the internals of this exception class.
 
 Of course, we still want to be sure that `CannotDeletePublishedPostException` is using the correct status code and message,
-but it is no longer the concern of this test case, but rather the concern of dedicated test case for the exception class itself.
+but it is no longer the concern of this test case, but rather the concern of a dedicated test case for the exception class itself.
 
 ```php
 class CannotDeletePublishedPostExceptionTest extends TestCase
