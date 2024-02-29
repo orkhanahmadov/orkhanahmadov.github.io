@@ -151,11 +151,10 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 
 In this case we expect that the test case execution must go into the `catch` block, and if it does not we fail the test case manually with `fail()` call.
 
-This gets the job code, now we have a full test coverage for your action class.
+This gets the job code, now we have a full test coverage for the action class.
 
-But looking at this test case and seeing how we do a workaround to assert the exception, highlights a possible improvement to our code.
-The exception we are throwing in our code is no longer a basic `HttpException`, but a modified version of it.
-We modify its status code and message to fit exactly into our business logic.
+But looking at this test case and seeing how we do a workaround to assert the exception, I believe it highlights a possible improvement to our code.
+The exception we are throwing in our code is no longer a basic `HttpException`, but a modified version of it with custom message and status code.
 This is a good opportunity to create a custom exception class for this use case and abstract the exception details into it. Something like:
 
 ```php
@@ -202,7 +201,8 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 }
 ```
 
-As you can see because we use the custom exception class, we no longer need to assert against the internals of this exception class.
+As you can see here, because we use the custom exception class, we no longer need to assert against the internals of this exception class.
+PHPUnit's `expectException` method is enough to assert that the exception is thrown and the test case passes.
 
 Of course, we still want to be sure that `CannotDeletePublishedPostException` is using the correct status code and message,
 but it is no longer the concern of this test case, but rather the concern of a dedicated test case for the exception class itself.
