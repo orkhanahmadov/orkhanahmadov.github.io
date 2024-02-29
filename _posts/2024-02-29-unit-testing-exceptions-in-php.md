@@ -21,10 +21,10 @@ class DeletePostAction
 }
 ```
 
-If we want to write test coverage for this class it will require 2 test cases:
+If we want to write test coverage for this class it will require at least 2 test cases:
 
-- One to assert that the action deletes the provided post
-- Another to assert that the action throws an exception when the provided post is published
+- Assert that the action deletes the provided post successfully
+- Assert that the action throws an exception when the provided post is published
 
 <!--more-->
 
@@ -55,6 +55,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
     $this->expectException(HttpException::class);
 
     $action->execute($post);
+    $this->assertTrue($post->exists()); // post did not get deleted
 }
 ```
 
@@ -74,6 +75,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
     $this->expectExceptionMessage('Cannot delete a published post');
 
     $action->execute($post);
+    $this->assertTrue($post->exists());
 }
 ```
 
@@ -93,6 +95,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
     $this->expectExceptionCode(403);
 
     $action->execute($post);
+    $this->assertTrue($post->exists());
 }
 ```
 
@@ -126,7 +129,7 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
 ```
 
 When you need to check against all the possible parameters and properties of the exception, we can no longer use PHPUnit's `expectException` or `expectExceotionMessage` methods.
-Instead, we can use a `try-catch` block inside the test case and do the assertions manually:
+Instead, we can use a `try-catch` block inside the test case and do the assertions manually.
 
 ```php
 public function testThrowsExceptionWhenPostIsPublished(): void
@@ -137,12 +140,16 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 
     try {
         $action->execute($post);
+        $this->assertTrue($post->exists());
+        $this->fail('Expected exception was not thrown');
     } catch (HttpException $e) {
         $this->assertSame(403, $e->getStatusCode());
         $this->assertSame('Cannot delete a published post', $e->getMessage());
     }
 }
 ```
+
+In this case we expect that the test case execution must go into the `catch` block, and if it does not we fail the test case manually with `fail()` call.
 
 This gets the job code, now we have a full test coverage for your action class.
 
