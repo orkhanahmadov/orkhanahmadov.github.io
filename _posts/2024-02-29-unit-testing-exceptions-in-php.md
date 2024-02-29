@@ -149,12 +149,12 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 }
 ```
 
-In this case we expect that the test case execution must go into the `catch` block, and if it does not we fail the test case manually with `fail()` call.
+In this case, we expect that the test case execution must go into the `catch` block, and if it does not we fail the test case manually with a `fail()` call.
 
 This gets the job code, now we have a full test coverage for the action class.
 
 But looking at this test case and seeing how we do a workaround to assert the exception, I believe it highlights a possible improvement to our code.
-The exception we are throwing in our code is no longer a basic `HttpException`, but a modified version of it with custom message and status code.
+The exception we are throwing in our code is no longer a basic `HttpException`, but a modified version of it with a custom message and status code.
 This is a good opportunity to create a custom exception class for this use case and abstract the exception details into it. Something like:
 
 ```php
