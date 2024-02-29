@@ -198,6 +198,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
     $this->expectException(CannotDeletePublishedPostException::class);
 
     $action->execute($post);
+    $this->assertTrue($post->exists());
 }
 ```
 
