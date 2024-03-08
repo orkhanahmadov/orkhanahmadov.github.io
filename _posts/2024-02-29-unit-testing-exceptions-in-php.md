@@ -61,7 +61,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 
 Here we instruct PHPUnit to expect an instance of `HttpException` to be thrown when the action is executed and this test will pass without any issues.
 
-But if you noticed we are not asserting the message of the exception, we are only asserting that an exception is thrown.
+But if you noticed we are not asserting the exception's message, we are only asserting that an exception is thrown.
 This can be solved by using the `expectExceptionMessage` method:
 
 ```php
@@ -79,7 +79,7 @@ public function testThrowsExceptionWhenPostIsPublished(): void
 }
 ```
 
-We are done with the message, but we go back to the exception that we throw in the `DeletePostAction` class, we also need to assert the status code of the exception.
+We are done with the message, but if we go back to the exception that we throw in the `DeletePostAction` class, we also need to assert the status code of the exception.
 We use `HttpException` and it can have different status codes. Here we throw that exception exactly with 403 status code, so we need to assert that the exception has the same status code.
 You might think for this we can use the PHPUnit's `expectExceptionCode` method, like:
 
@@ -103,7 +103,7 @@ But if you run it, you'll see the test case is not passing and complaining about
 Why is that? Because PHPUnit's `expectExceptionCode` checks against the exception's internal code, not the HTTP status code.
 In this case for `HttpException` it is by default `0` and we are not modifying the exception's internal code.
 
-If we take a look at `HttpException` you can see provided `$statusCode` is saved as a private property and there is a method `getStatusCode` to get it:
+If we take a look at `HttpException` you can see that the provided `$statusCode` is saved as a private property and there is a method `getStatusCode` to get it:
 
 ```php
 class HttpException extends \RuntimeException implements HttpExceptionInterface
