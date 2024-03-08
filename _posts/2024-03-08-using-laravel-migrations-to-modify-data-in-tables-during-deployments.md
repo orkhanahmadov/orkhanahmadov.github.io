@@ -24,9 +24,9 @@ But because migrations are so convenient and easy to use, can we use them to mod
 Yes, the answer is using different folders to store data modification migrations.
 
 Simply, create a new folder in the `database` directory, naming it `data-migrations`, for example. Then add all your data modification migrations in this folder.
-Since data migrations are usually one-way only, you can also skip the `down` method in these migrations for simplicity.
+Since data migrations are usually one-way only, you can also skip the `down` method in them for simplicity.
 
-How do we run these migrations? Laravel's migration command always looks for migrations in the `database/migrations` directory, but it is possible to instruct to look into different directories for migration files.
+How do we run these migrations? Laravel's migration command always looks for migrations in the `database/migrations` directory, but it is possible to instruct to look into different directory.
 
 ```shell
 php artisan migrate --path=database/data-migrations
@@ -34,7 +34,14 @@ php artisan migrate --path=database/data-migrations
 
 This command will run all migrations in the `database/data-migrations` directory.
 
-This approach solves all the previous downsides of using migrations for data modifications in tables. It keeps the migrations directory clean and focused on database structure modifications, and when you want to squash migrations, you can do it without worrying about data migrations.
-Since data migrations are in a separate directory, they are only meant for data modifications you can safely delete them after they've been run and are no longer needed on any environments.
+This approach solves all the previous downsides of using migrations for data modifications in tables. It keeps the migrations directory clean and focused on database structure modifications, and when you want to squash them, you can do it without worrying about data modification.
+Since data migrations are in a separate directory and they are only meant for data modifications, you can safely delete them after they've been run and are no longer needed on any environments.
 
-Of course, because we still use Laravel's migration, every migration is version-controlled in the `migrations` table.
+Of course, because we still use Laravel's built-in migration logic, every migration is version-controlled in the `migrations` table.
+
+Now you can put that artisan command to run after the main migration command in application's deployment script:
+
+```shell
+php artisan migrate --force
+php artisan migrate --path=database/data-migrations --force
+```
