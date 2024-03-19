@@ -57,14 +57,14 @@ final class UpdateProfileControllerTest extends TestCase
 ```
 
 This assertion abstracts the redirect and flash message assertion and also makes the test case more expressive.
-But if you try to run this test case, you'll get an error that `assertRedirectsWithFlash` method does not exist.
+But if you try to run this test case, you'll get an error that the `assertRedirectsWithFlash` method does not exist.
 
 Test response macros to the rescue!
 
-If you take a look at the source code of `assertRedirect` or `assertSessionHas` you'll see that they are defined on `\Illuminate\Testing\TestResponse` class.
+If you take a look at the source code of `assertRedirect` or `assertSessionHas` you'll see that they are defined on the `\Illuminate\Testing\TestResponse` class.
 And if you take a look at its traits, you'll see that it uses `\Illuminate\Support\Traits\Macroable` trait. Which means we can easily add our own custom methods to it.
 
-In test environment, easiest way to register custom macros in Laravel is using `CreatesApplication` trait in application `tests` directory.
+In the test environment, the easiest way to register custom macros in Laravel is using the `CreatesApplication` trait in the application `tests` directory.
 
 Trait should have `createApplication` method that looks like this:
 
@@ -79,7 +79,7 @@ public function createApplication()
 }
 ```
 
-Here, just before we return the `$app`, we can register our custom macros that will be only available in test environment:
+Here, just before we return the `$app`, we can register our custom macros that will be only available in the test environment:
 
 ```php
 public function createApplication()
@@ -98,6 +98,6 @@ public function createApplication()
 ```
 
 Now if you run the same test case again, it should pass.
-You can use `assertRedirectsWithFlash` method in any test case that returns `\Illuminate\Testing\TestResponse` response and make flash message assertions more expressive and consistent.
+You can use the `assertRedirectsWithFlash` method in any test case that returns the `\Illuminate\Testing\TestResponse` response and makes flash message assertions more expressive and consistent.
 
 Happy testing!
