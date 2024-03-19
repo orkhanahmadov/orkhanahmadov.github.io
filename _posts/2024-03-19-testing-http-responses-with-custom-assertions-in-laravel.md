@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Testing HTTP responses with custom test assertions
+title: Testing HTTP responses with custom assertions in Laravel
 ---
 
 Laravel's HTTP test assertions are great for testing the response of your application.
