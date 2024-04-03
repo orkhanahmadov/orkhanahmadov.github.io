@@ -3,7 +3,7 @@ layout: post
 title: Testing scheduled commands and jobs in Laravel's console kernel
 ---
 
-Your Laravel application's console kernel is probably containing some scheduled tasks.
+Your Laravel application's console kernel probably contains some scheduled tasks.
 But how do you make sure they are configured correctly and no developer will accidentally remove or modify them?
 
 Take this console kernel as an example:
@@ -23,13 +23,13 @@ class Kernel extends ConsoleKernel
 
 <!--more-->
 
-Here we have as artisan command and a queued job scheduled to run every hour and every day respectively.
+Here we have an artisan command and a queued job scheduled to run every hour and every day respectively.
 Assuming you already tested them individually in unit tests, how do you test the console kernel to make sure they are scheduled correctly?
 
-The easiest way to do this would be using test macros on Laravel's Scheduler facade.
+The easiest way to do this would be to use test macros on Laravel's Scheduler facade.
 If you've seen my previous post about [testing HTTP responses with custom assertions in Laravel](https://orkhan.dev/2024/03/19/testing-http-responses-with-custom-assertions-in-laravel/), we can use the same approach here.
 
-We create a macro that checks against scheduled command:
+We create a macro that checks against the scheduled command:
 
 ```php
 use Illuminate\Console\Scheduling\Event;
