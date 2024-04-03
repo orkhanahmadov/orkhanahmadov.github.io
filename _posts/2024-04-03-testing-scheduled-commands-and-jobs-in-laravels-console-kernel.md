@@ -11,8 +11,6 @@ Take this console kernel as an example:
 ```php
 class Kernel extends ConsoleKernel
 {
-    protected $commands = [];
-
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('prune-stale-files')->hourly();
